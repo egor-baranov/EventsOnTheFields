@@ -10,8 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonRequest
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
 import java.net.URL
 import kotlin.concurrent.thread
 
@@ -24,9 +30,10 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
     var locationManager: LocationManager? = null
     var locationListener: LocationListener? = null
     var currentLocation: Location? = null
-    val ip = "127.0.0.1:5000"
+    val ip = "192.168.43.3:5000"
     var id: Long = -1
     var name: String = "username"
+    var working = true
     // BottomNavigationView: Dashboard + Log
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,17 +74,22 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
         }
         thread(start = true){
-            while(true){
+            val queue = Volley.newRequestQueue(this)
+            queue.start()
+            while(working){
                 Thread.sleep(1000)
                 runOnUiThread { Toast.makeText(
                     applicationContext, "x = ${currentLocation?.latitude}, y = ${currentLocation?.longitude}",
-                    Toast.LENGTH_LONG
-                ).show()
+                    Toast.LENGTH_LONG).show()
                 }
                 // request
-                val url: URL = URL("http://$ip/tick?id=$id&lat=${currentLocation?.latitude}&lng=${currentLocation?.longitude}")
-
+                val url = "http://$ip/tick?id=$id&lat=${currentLocation?.latitude}&lng=${currentLocation?.longitude}"
+                val stringRequest = StringRequest(Request.Method.GET, url, Response.Listener<String> { response ->
+                    // обработка responce
+                }, Response.ErrorListener {  } )
+                queue.add(stringRequest)
             }
+            queue?.cancelAll("A")
         }
     }
 
@@ -132,5 +144,10 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
         adapter.addFragment(logFragment, "Log")
         viewPager.adapter = adapter
         viewPager.currentItem = 0
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        working = false
     }
 }
