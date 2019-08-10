@@ -17,9 +17,9 @@ class DashboardFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        try{
+        try {
             mListener = context as DashboardInteractionListener
-        } catch (e: ClassCastException){
+        } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + " должен реализовывать интерфейс DashboardInteractionListener")
         }
     }
