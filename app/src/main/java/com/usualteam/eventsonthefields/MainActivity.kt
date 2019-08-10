@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
-
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteractionListener,
     LogFragment.LogInteractionListener {
@@ -52,11 +52,6 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
 
             override fun onLocationChanged(location: Location) {
                 currentLocation = location
-                Toast.makeText(
-                    applicationContext,
-                    "x = ${location.latitude}, y = ${location.longitude}",
-                    Toast.LENGTH_LONG
-                ).show()
             }
 
             override fun onProviderDisabled(provider: String) { }
@@ -69,10 +64,17 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
 
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
         }
-        Toast.makeText(
-            applicationContext, "x = ${currentLocation?.latitude}, y = ${currentLocation?.longitude}",
-            Toast.LENGTH_LONG
-        ).show()
+        thread(start = true){
+            while(true){
+                Thread.sleep(1000)
+                runOnUiThread { Toast.makeText(
+                    applicationContext, "x = ${currentLocation?.latitude}, y = ${currentLocation?.longitude}",
+                    Toast.LENGTH_LONG
+                ).show()
+                }
+
+            }
+        }
     }
 
     override fun onResume() {
