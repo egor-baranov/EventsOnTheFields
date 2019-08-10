@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EventsOnTheFields</string>
+    <string name="hit_icon">Hit icon</string>
 </resources>
