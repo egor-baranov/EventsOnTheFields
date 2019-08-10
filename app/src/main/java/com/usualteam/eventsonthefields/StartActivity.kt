@@ -26,10 +26,16 @@ class StartActivity : Activity() {
             }
             else if(ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    1)
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 1)
             }
             else {
+                this.openFileOutput("name", Context.MODE_PRIVATE).write(editText.text.toString().toByteArray())
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+            if(ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED){
                 this.openFileOutput("name", Context.MODE_PRIVATE).write(editText.text.toString().toByteArray())
                 startActivity(Intent(this, MainActivity::class.java))
             }

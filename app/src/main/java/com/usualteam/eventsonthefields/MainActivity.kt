@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dashboard.*
 import org.json.JSONObject
 import java.net.URL
 import kotlin.concurrent.thread
@@ -64,27 +65,23 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
                 currentLocation = location
             }
 
-            override fun onProviderDisabled(provider: String) { }
+            override fun onProviderDisabled(provider: String) {}
 
             override fun onProviderEnabled(provider: String) {
-                try{
+                try {
                     currentLocation = locationManager?.getLastKnownLocation(provider)
-                } catch(e: SecurityException){ }
+                } catch (e: SecurityException) {
+                }
             }
 
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
         }
-        thread(start = true){
+        thread(start = true) {
             val queue = Volley.newRequestQueue(this)
             queue.start()
-            while(working){
+            while (working) {
                 Thread.sleep(1000)
-//                runOnUiThread { Toast.makeText(
-//                    applicationContext, "x = ${currentLocation?.latitude}, y = ${currentLocation?.longitude}",
-//                    Toast.LENGTH_LONG).show()
-//                }
-                // request
-                if(currentLocation != null) {
+                if (currentLocation != null) {
                     val url =
                         "http://$ip/tick?id=$id&lat=${currentLocation?.latitude}&lng=${currentLocation?.longitude}"
                     val stringRequest = StringRequest(Request.Method.GET, url, Response.Listener<String> { response ->
@@ -97,7 +94,7 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
                                 Toast.LENGTH_LONG
                             ).show()
                         }
-
+                        // hpIndicator.text = round(jsonProperties.getDouble("hp")).toString()
                     }, Response.ErrorListener { err ->
                         Log.d("DEBUG", err.toString())
                     })
@@ -107,6 +104,8 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
             queue?.cancelAll("A")
         }
     }
+
+    private fun round(n: Double): Int = n.toInt() + if (n == n.toInt().toDouble()) 0 else 1
 
     override fun onResume() {
         super.onResume()
@@ -149,7 +148,7 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
 
     override fun onPause() {
         super.onPause()
-        if(locationManager != null) locationManager?.removeUpdates(locationListener!!)
+        if (locationManager != null) locationManager?.removeUpdates(locationListener!!)
     }
 
     // инициализация viewPager-а
