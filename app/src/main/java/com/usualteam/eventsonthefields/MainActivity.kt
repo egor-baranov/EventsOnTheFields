@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import java.net.URL
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteractionListener,
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
     var locationManager: LocationManager? = null
     var locationListener: LocationListener? = null
     var currentLocation: Location? = null
+    val ip = "127.0.0.1:5000"
     var id: Long = -1
     var name: String = "username"
     // BottomNavigationView: Dashboard + Log
@@ -72,6 +74,8 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
                     Toast.LENGTH_LONG
                 ).show()
                 }
+                // request
+                val url: URL = URL("http://$ip/tick?id=$id&lat=${currentLocation?.latitude}&lng=${currentLocation?.longitude}")
 
             }
         }
