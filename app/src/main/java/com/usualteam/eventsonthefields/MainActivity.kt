@@ -5,6 +5,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -78,16 +79,30 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
             queue.start()
             while(working){
                 Thread.sleep(1000)
-                runOnUiThread { Toast.makeText(
-                    applicationContext, "x = ${currentLocation?.latitude}, y = ${currentLocation?.longitude}",
-                    Toast.LENGTH_LONG).show()
-                }
+//                runOnUiThread { Toast.makeText(
+//                    applicationContext, "x = ${currentLocation?.latitude}, y = ${currentLocation?.longitude}",
+//                    Toast.LENGTH_LONG).show()
+//                }
                 // request
-                val url = "http://$ip/tick?id=$id&lat=${currentLocation?.latitude}&lng=${currentLocation?.longitude}"
-                val stringRequest = StringRequest(Request.Method.GET, url, Response.Listener<String> { response ->
-                    // обработка responce
-                }, Response.ErrorListener {  } )
-                queue.add(stringRequest)
+                if(currentLocation != null) {
+                    val url =
+                        "http://$ip/tick?id=$id&lat=${currentLocation?.latitude}&lng=${currentLocation?.longitude}"
+                    val stringRequest = StringRequest(Request.Method.GET, url, Response.Listener<String> { response ->
+                        // обработка response
+                        val jsonProperties: JSONObject = JSONObject(response).getJSONObject("properties")
+                        runOnUiThread {
+                            Toast.makeText(
+                                applicationContext, "HP=${jsonProperties.getDouble("hp")}, " +
+                                        "radiation=${jsonProperties.getDouble("radiation")}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                    }, Response.ErrorListener { err ->
+                        Log.d("DEBUG", err.toString())
+                    })
+                    queue.add(stringRequest)
+                }
             }
             queue?.cancelAll("A")
         }
