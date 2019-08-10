@@ -25,6 +25,7 @@
                 android:layout_marginTop="210dp" android:layout_marginBottom="4dp">
         <LinearLayout
                 android:id="@+id/dashboard_layout"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

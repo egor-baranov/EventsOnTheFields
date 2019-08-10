@@ -5,7 +5,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
         openFileInput("name").use {
             name = it.readBytes().toString(Charsets.UTF_8)
         }
-        Toast.makeText(this, "$name, твой id = $id", Toast.LENGTH_LONG).show()
+        // Toast.makeText(this, "$name, твой id = $id", Toast.LENGTH_LONG).show()
         setContentView(R.layout.activity_main)
         setupViewPager(viewPager)
         tabLayout.run {
@@ -49,25 +48,36 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
         }
 
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        val locationListener = object : LocationListener {
+        locationListener = object : LocationListener {
 
             override fun onLocationChanged(location: Location) {
                 currentLocation = location
-                Toast.makeText(applicationContext, "x = ${location.latitude}, y = ${location.longitude}", Toast.LENGTH_LONG).show()
-                // showLocation(location)
+                Toast.makeText(
+                    applicationContext,
+                    "x = ${location.latitude}, y = ${location.longitude}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
-            override fun onProviderDisabled(provider: String) {}
+            override fun onProviderDisabled(provider: String) { }
 
-            override fun onProviderEnabled(provider: String) {}
+            override fun onProviderEnabled(provider: String) {
+                try{
+                    currentLocation = locationManager?.getLastKnownLocation(provider)
+                } catch(e: SecurityException){ }
+            }
 
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
         }
+        Toast.makeText(
+            applicationContext, "x = ${currentLocation?.latitude}, y = ${currentLocation?.longitude}",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     override fun onResume() {
         super.onResume()
-        if(locationListener == null) return
+        if (locationListener == null) return
         if (ContextCompat.checkSelfPermission(
                 applicationContext,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -78,31 +88,35 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             locationManager?.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                1000 * 10, 10F, locationListener!!
+                LocationManager.GPS_PROVIDER, 0, 0.1F, locationListener!!
             )
             locationManager?.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, 1000 * 10, 10F,
-                locationListener!!
+                LocationManager.NETWORK_PROVIDER, 0, 0.1F, locationListener!!
             )
-        }
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            )
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), 1
+                )
 
-        else{
-            if(ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED)
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), 1)
-
-            if(ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED)
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 1)
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext, android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            )
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 1
+                )
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if(locationListener != null) locationManager?.removeUpdates(locationListener!!)
+        if(locationManager != null) locationManager?.removeUpdates(locationListener!!)
     }
 
     // инициализация viewPager-а
