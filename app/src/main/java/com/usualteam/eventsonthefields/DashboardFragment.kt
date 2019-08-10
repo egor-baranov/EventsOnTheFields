@@ -11,9 +11,7 @@ import java.lang.ClassCastException
 
 class DashboardFragment : Fragment() {
 
-    interface DashboardInteractionListener{
-
-    }
+    interface DashboardInteractionListener
 
     var mListener: DashboardInteractionListener? = null
 
@@ -26,13 +24,8 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dashboard, container, false)
-        return view
+        return inflater.inflate(R.layout.dashboard, container, false)
     }
 
 }
