@@ -6,7 +6,9 @@
         android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView android:layout_width="70dp" android:layout_height="70dp"
+    <ImageView android:layout_width="70dp"
+               android:tag="image"
+               android:layout_height="70dp"
                android:layout_marginBottom="28dp"
                android:src="@drawable/ic_camera_alt_black_24dp"
                app:srcCompat="@drawable/ic_camera_alt_black_24dp"
@@ -16,6 +18,7 @@
                android:layout_marginTop="8dp"/>
     <TextView
             android:text="Исцеление"
+            android:tag="text"
             android:textSize="12sp"
             android:layout_width="64dp"
             android:layout_height="16dp"

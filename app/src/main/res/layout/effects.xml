@@ -18,42 +18,8 @@
                         android:id="@+id/effects_grid"
                         android:layout_gravity="center"
                         android:columnCount="4"
-                        android:animateLayoutChanges="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
-                    <include layout="@layout/continuous_event"/>
                 </GridLayout>
             </androidx.cardview.widget.CardView>
             </ScrollView>

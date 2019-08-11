@@ -6,6 +6,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dashboard.*
+import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.concurrent.thread
 
@@ -80,12 +82,17 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
             queue.start()
             while (working) {
                 Thread.sleep(1000)
+                runOnUiThread{ effectsFragment.clearGrid() }
                 if (currentLocation != null) {
                     val url =
                         "http://$ip/tick?id=$id&lat=${currentLocation?.latitude}&lng=${currentLocation?.longitude}"
                     val stringRequest = StringRequest(Request.Method.GET, url, Response.Listener<String> { response ->
                         // обработка response
+
                         val jsonProperties: JSONObject = JSONObject(response).getJSONObject("properties")
+                        val jsonContinuousEvents: JSONArray = JSONObject(response).getJSONArray("continuous_events")
+                        val jsonOneTimeEvents: JSONArray = JSONObject(response).getJSONArray("one_time_events")
+
                         runOnUiThread {
                             Toast.makeText(
                                 applicationContext, "HP=${jsonProperties.getDouble("hp")}, " +
@@ -93,8 +100,24 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
                                 Toast.LENGTH_LONG
                             ).show()
                         }
+
                         hpIndicator.progress = round(jsonProperties.getDouble("hp"))
-                        // hpIndicator.text = round(jsonProperties.getDouble("hp")).toString()
+                        dashboardFragment.addProperty("radiation", round(jsonProperties.getDouble("radiation")))
+
+                        // итерация по контам
+                        for(i in 0 until jsonContinuousEvents.length()){
+                            val curObj = jsonContinuousEvents.getJSONObject(i)
+                            effectsFragment.addContinuousEvent(curObj.getString("name"), curObj.getString("type"))
+                        }
+
+                        // итерация по onetime-ам
+                        for(i in 0 until jsonOneTimeEvents.length()){
+                            val curObj = jsonOneTimeEvents.getJSONObject(i)
+                            Log.d("DEBUG", curObj.toString())
+                            logFragment.addOneTimeEvent(curObj.getString("name"), curObj.getString("type"),
+                                curObj.getDouble("timestamp").toLong())
+                        }
+
                     }, Response.ErrorListener { err ->
                         Log.d("DEBUG", err.toString())
                     })
