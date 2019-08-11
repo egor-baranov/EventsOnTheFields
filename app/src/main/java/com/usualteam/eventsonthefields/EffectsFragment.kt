@@ -27,4 +27,8 @@ class EffectsFragment : Fragment() {
         val view = inflater.inflate(R.layout.effects, container, false)
         return view
     }
+
+    public fun addContinuousEvent(text: String){
+
+    }
 }

@@ -7,13 +7,54 @@
               android:animateLayoutChanges="true"
               android:layout_height="match_parent">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
-                  android:id="@+id/hitsLayout"
-                  android:orientation="vertical"
-                  android:animateLayoutChanges="true"
-                  app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-                  android:layout_marginTop="48dp">
-
-    </LinearLayout>
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="56dp" app:layout_constraintBottom_toBottomOf="parent">
+        <LinearLayout
+                android:id="@+id/logLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+            <include layout="@layout/one_time_event"/>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

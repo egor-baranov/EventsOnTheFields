@@ -27,7 +27,9 @@
                 android:screenOrientation="portrait"
                 android:name=".StartActivity">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity
+                android:screenOrientation="portrait"
+                android:name=".MainActivity">
 
         </activity>
     </application>

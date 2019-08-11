@@ -28,5 +28,7 @@ class DashboardFragment : Fragment() {
         val view = inflater.inflate(R.layout.dashboard, container, false)
         return view
     }
+    public fun addProperty(text: String, progress: Int){
 
+    }
 }

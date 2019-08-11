@@ -13,21 +13,20 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dashboard.*
 import org.json.JSONObject
-import java.net.URL
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteractionListener,
-    LogFragment.LogInteractionListener {
+    LogFragment.LogInteractionListener, EffectsFragment.EffectsInteractionListener {
 
     private val dashboardFragment: DashboardFragment = DashboardFragment()
     private val logFragment: LogFragment = LogFragment()
+    private val effectsFragment: EffectsFragment = EffectsFragment()
 
     var locationManager: LocationManager? = null
     var locationListener: LocationListener? = null
@@ -94,6 +93,7 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
                                 Toast.LENGTH_LONG
                             ).show()
                         }
+                        hpIndicator.progress = round(jsonProperties.getDouble("hp"))
                         // hpIndicator.text = round(jsonProperties.getDouble("hp")).toString()
                     }, Response.ErrorListener { err ->
                         Log.d("DEBUG", err.toString())
@@ -154,10 +154,11 @@ class MainActivity : AppCompatActivity(), DashboardFragment.DashboardInteraction
     // инициализация viewPager-а
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
+        adapter.addFragment(effectsFragment, "Effects")
         adapter.addFragment(dashboardFragment, "Dashboard")
         adapter.addFragment(logFragment, "Log")
         viewPager.adapter = adapter
-        viewPager.currentItem = 0
+        viewPager.currentItem = 1
     }
 
     override fun onDestroy() {
